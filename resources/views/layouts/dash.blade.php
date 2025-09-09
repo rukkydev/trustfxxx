@@ -23,6 +23,8 @@
     
     <!-- Remix Icons -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://icons.getbootstrap.com/assets/font/bootstrap-icons.min.css">
     
     <!-- Cryptoon Base CSS (if you want to keep some original styles) -->
     <link rel="stylesheet" href="{{ asset('user/assets/css/cryptoon.style.min.css') }}">
