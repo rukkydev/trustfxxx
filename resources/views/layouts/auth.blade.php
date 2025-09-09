@@ -1,3 +1,4 @@
+{{-- resources/views/layouts/auth.blade.php --}}
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -7,8 +8,8 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'FX Online Pro') - Investment Platform</title>
-    <link rel="icon" type="image/png" href="{{ asset('assets/img/favicon.png') }}">
+    <title>@yield('title', 'Sign In') - FX Online Pro</title>
+    <link rel="icon" type="image/png" href="{{ asset('user/assets/img/favicon.png') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com/">
@@ -21,43 +22,55 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     
-    <!-- AdminUIUX Theme CSS -->
-    <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet">
+    <!-- Livewire Styles - Moved to top to prevent flash of unstyled content -->
+    @livewireStyles
     
+    <!-- Custom CSS -->
     <style>
         :root {
             --adminuiux-content-font: 'Nunito Sans', sans-serif;
             --adminuiux-content-font-weight: 400;
             --adminuiux-title-font: 'Nunito Sans', sans-serif;
             --adminuiux-title-font-weight: 600;
-            --primary-color: #2563eb;
-            --primary-dark: #1d4ed8;
+            --primary-color: #7705b9;
+            --primary-dark: #42005c;
             --text-muted: #6b7280;
         }
 
         body {
             font-family: var(--adminuiux-content-font);
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #ffffff;
             min-height: 100vh;
+            margin: 0;
+            padding: 0;
         }
 
-        .auth-container {
-            min-height: 100vh;
+        .pageloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-color);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            z-index: 9999;
+            color: white;
         }
 
-        .auth-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            width: 100%;
-            max-width: 400px;
-            padding: 2rem;
+        .loader {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .brand-logo {
@@ -90,110 +103,24 @@
             font-weight: 500;
         }
 
-        .auth-title {
-            font-size: 1.875rem;
-            font-weight: 700;
-            color: #111827;
-            margin-bottom: 0.5rem;
+        /* Footer Styles */
+        footer {
             text-align: center;
-        }
-
-        .auth-subtitle {
+            padding: 1rem 0;
             color: var(--text-muted);
-            text-align: center;
-            margin-bottom: 2rem;
+            border-top: 1px solid #e5e7eb;
+            margin-top: auto;
         }
 
-        .form-floating > label {
+        footer .footer-links a {
             color: var(--text-muted);
+            margin: 0 0.5rem;
+            text-decoration: none;
+            transition: color 0.2s ease;
         }
 
-        .form-control {
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            padding: 0.875rem;
-            font-size: 0.875rem;
-            transition: all 0.2s ease;
-        }
-
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .btn-primary-custom {
-            background: var(--primary-color);
-            border: none;
-            border-radius: 8px;
-            padding: 0.875rem 1.5rem;
-            font-weight: 600;
-            font-size: 0.875rem;
-            transition: all 0.2s ease;
-        }
-
-        .btn-primary-custom:hover {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
-        }
-
-        .btn-outline-custom {
-            border: 1px solid #d1d5db;
-            color: #374151;
-            border-radius: 8px;
-            padding: 0.875rem 1.5rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-        }
-
-        .btn-outline-custom:hover {
-            background: #f9fafb;
-            border-color: #9ca3af;
-        }
-
-        .social-icon {
-            width: 20px;
-            height: 20px;
-            margin-right: 12px;
-        }
-
-        .password-toggle {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            z-index: 5;
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 1.5rem 0;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #e5e7eb;
-        }
-
-        .divider span {
-            padding: 0 1rem;
-            color: var(--text-muted);
-            font-size: 0.875rem;
-        }
-
-        .form-check-input:checked {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
+        footer .footer-links a:hover {
+            color: var(--primary-color);
         }
 
         .text-primary-custom {
@@ -205,43 +132,25 @@
             text-decoration: underline;
         }
 
-        .alert {
-            border-radius: 8px;
-            border: none;
+        /* Livewire-specific fixes */
+        [wire\:loading], [wire\:loading\.delay], [wire\:loading\.inline-block], [wire\:loading\.inline], [wire\:loading\.block], [wire\:loading\.flex], [wire\:loading\.table], [wire\:loading\.grid] {
+            display: none;
         }
 
-        .pageloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--primary-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            color: white;
+        [wire\:offline] {
+            display: none;
         }
 
-        .loader {
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        [wire\:dirty]:not([wire\:dirty\.live]) {
+            display: none;
         }
 
         @media (max-width: 576px) {
-            .auth-card {
-                margin: 1rem;
-                padding: 1.5rem;
+            .brand-logo .logo-text {
+                font-size: 1.25rem;
+            }
+            .brand-logo .logo-subtext {
+                font-size: 0.75rem;
             }
         }
     </style>
@@ -250,12 +159,12 @@
 </head>
 
 <body>
-    <!-- Page loader -->
-    <div class="pageloader" id="pageloader">
+    <!-- Page Loader -->
+    {{-- <div class="pageloader" id="pageloader">
         <div class="text-center">
             <div class="brand-logo text-white mb-3">
                 <div class="logo-icon bg-white">
-                    <i class="bi bi-graph-up text-primary"></i>
+                    <i class="bi bi-graph-up" style="color: #7705b9;"></i>
                 </div>
                 <div>
                     <div class="logo-text">FX ONLINE</div>
@@ -264,42 +173,54 @@
             </div>
             <div class="loader mx-auto"></div>
         </div>
-    </div>
+    </div> --}}
 
-    <main class="auth-container">
-        <div class="auth-card">
-            <!-- Logo -->
-            <div class="brand-logo">
-                <div class="logo-icon">
-                    <i class="bi bi-graph-up text-white"></i>
-                </div>
-                <div>
-                    <div class="logo-text">FX ONLINE</div>
-                    <div class="logo-subtext">PRO COMPANY</div>
-                </div>
-            </div>
-
-            <!-- Page Content -->
+    <main class="d-flex flex-column min-vh-100">
+        <!-- Page Content -->
+        <div class="flex-grow-1 d-flex justify-content-center align-items-center py-2">
             @yield('content')
         </div>
+
+        <!-- Footer -->
+        <footer>
+            <p class="mb-2 fs-14">&copy; {{ date('Y') }} FX Online Pro. All Rights Reserved.</p>
+            <div class="footer-links d-flex justify-content-center gap-3 fs-14">
+                <a href="#" class="text-primary-custom">Terms & Conditions</a>
+                <a href="#" class="text-primary-custom">Privacy Policy</a>
+                <a href="#" class="text-primary-custom">Help</a>
+                <a href="#" class="text-primary-custom">English</a>
+            </div>
+        </footer>
     </main>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+    <script src="{{ asset('user/assets/js/app.js') }}"></script>
+
+    <!-- Livewire Scripts - Moved to bottom for better performance -->
+    @livewireScripts
+
     <!-- Custom JS -->
     <script>
-        // Hide page loader
+        // Hide page loader - ensure it doesn't interfere with Livewire
         document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(function() {
-                document.getElementById('pageloader').style.display = 'none';
-            }, 1000);
+            // Check if Livewire is loaded first
+            if (typeof Livewire !== 'undefined') {
+                Livewire.hook('component.initialized', component => {
+                    document.getElementById('pageloader').style.display = 'none';
+                });
+            } else {
+                // Fallback if Livewire isn't loaded
+                setTimeout(function() {
+                    document.getElementById('pageloader').style.display = 'none';
+                }, 1000);
+            }
         });
 
-        // Password toggle functionality
-        function togglePassword(inputId, iconElement) {
+        // Password toggle function for Livewire forms
+        function togglePassword(inputId, buttonElement) {
             const passwordInput = document.getElementById(inputId);
-            const icon = iconElement.querySelector('i');
+            const icon = buttonElement.querySelector('i');
             
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
@@ -308,21 +229,18 @@
                 passwordInput.type = 'password';
                 icon.className = 'bi bi-eye';
             }
+            
+            // Prevent form submission
+            return false;
         }
 
-        // Form validation feedback
+        // Prevent form submission when clicking password toggle
         document.addEventListener('DOMContentLoaded', function() {
-            const forms = document.querySelectorAll('.needs-validation');
-            
-            Array.from(forms).forEach(function(form) {
-                form.addEventListener('submit', function(event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    
-                    form.classList.add('was-validated');
-                }, false);
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('[onclick*="togglePassword"]')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
             });
         });
 

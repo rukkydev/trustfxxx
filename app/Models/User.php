@@ -45,4 +45,15 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function referrals()
+    {
+        return $this->hasMany(Referral::class, 'user_id'); 
+        // adjust foreign key if different
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }
